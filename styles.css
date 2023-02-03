@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+
+:root {
+    --header-fallback-font-families: 'Courier New', Courier, monospace;
+    --body-background-color: #ffd383;
+    --gameboard-background-color: #ffe9e9;
+
+    --header-font-size: 3rem;
+
+    --footer-font-size: 1rem;
+    --footer-vertical-padding: 1rem;
+
+    --body-height: calc(
+        100vh
+        - (var(--footer-font-size) + var(--footer-vertical-padding) * 2)
+        - (var(--header-font-size) * 2)
+        );
+
+
+    --gameboard-gap: 10px;
+    --gameboard-margin: 0;
+    --gameboard-width: clamp(460px, calc(100% - var(--gameboard-margin) * 2), 50vw);
+    /* --gameboard-width: 300px; */
+
+    --gameboard-grid-background-color: #b5bcff;
+}
+
+body {
+    background-color: var(--body-background-color);
+    height: var(--body-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+footer {
+    padding-top: var(--footer-vertical-padding);
+    padding-bottom: var(--footer-vertical-padding);
+    font-size: var(--footer-font-size);
+}
+
+header {
+    font-family: 'Rock Salt', var(--header-fallback-font-families);
+    font-size: var(--header-font-size);
+}
+
+.container {
+    flex: 1;
+
+    display: flex;
+}
+
+.info-control {
+    flex: 1;
+}
+
+.gameboard-container {
+    flex: 2;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameboard {
+    height: clamp(400px, 80%, calc(100vh * .6));
+    aspect-ratio: 1/1;
+
+    background-color: var(--gameboard-background-color);
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+
+    border-radius: var(--gameboard-gap);
+
+    gap: var(--gameboard-gap);
+    padding: var(--gameboard-gap);
+}
+
+.gameboard-grid {
+    background-color: var(--gameboard-grid-background-color);
+}
