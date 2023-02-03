@@ -1,11 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Aboreto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
 
 :root {
     --header-fallback-font-families: 'Courier New', Courier, monospace;
     --body-background-color: #ffd383;
     --gameboard-background-color: #ffe9e9;
 
-    --header-font-size: 3rem;
+    --header-font-size: 5rem;
+    --header-font-color: rgb(255, 103, 129);
 
     --footer-font-size: 1rem;
     --footer-vertical-padding: 1rem;
@@ -16,6 +19,7 @@
         - (var(--header-font-size) * 2)
         );
 
+    --body-height: calc(100vh - var(--footer-vertical-padding));
 
     --gameboard-gap: 10px;
     --gameboard-margin: 0;
@@ -38,17 +42,22 @@ footer {
     padding-top: var(--footer-vertical-padding);
     padding-bottom: var(--footer-vertical-padding);
     font-size: var(--footer-font-size);
+    font-family: 'Aboreto', var(--header-fallback-font-families);
 }
 
 header {
-    font-family: 'Rock Salt', var(--header-fallback-font-families);
+    font-family: 'Amatic SC', var(--header-fallback-font-families);
     font-size: var(--header-font-size);
+    color: var(--header-font-color);
+    font-weight: bold;
 }
 
 .container {
     flex: 1;
 
     display: flex;
+    font-family: 'Montserrat', var(--header-fallback-font-families);
+    font-weight: 400;
 }
 
 .info-control {
