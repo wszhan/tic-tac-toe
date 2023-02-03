@@ -60,6 +60,14 @@ header {
     font-weight: 400;
 }
 
+.info-control > button {
+    color: rgb(103, 102, 102);
+    border: none;
+    background-color: rgb(198, 240, 255);
+    padding: 1em 2em;
+    border-radius: 1em;
+}
+
 .info-control {
     flex: 1;
 }
