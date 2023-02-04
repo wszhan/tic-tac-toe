@@ -120,5 +120,10 @@ button:active {
 }
 
 .gameboard-grid {
+    border-radius: 5%;
     background-color: var(--gameboard-grid-background-color);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
