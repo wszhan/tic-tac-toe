@@ -7,16 +7,22 @@ const STRAWBERRY_PLAYER_NAME = 'strawberry';
 const BLUEBERRY_PLAYER_NAME = 'blueberry';
 const START_MSG = 'Click any grid to start the game';
 const WIN_MSG = `Player {$winner} wins!`;
+const RESTART_PROMPT_MSG = 'Do you want to restart the game? If yes, input \'y\'.';
+const ACCEPTABLE_RESTART_MESSAGES = ['y', 'yes', 'yeah', 'ya', 'yup'];
 
+const restartButton = document.querySelector('button#restart-button');
 const gameboard = document.querySelector('div.gameboard');
 const whosturnInfo = document.querySelector('div.player-turn');
 const gamehint = document.querySelector('div.game-state');
-const grids = [];
+
+let grids = [];
 
 function makeGrid(index) {
     let gridOwner = undefined;
+
     return {
-        setPlayer: player => gridOwner = player,
+        setPlayer: (player) => (gridOwner = player),
+        getPlayer: () => gridOwner,
         DOMElement: createGridInDom(index),
     };
 }
@@ -31,7 +37,7 @@ function addClickCallback(gridElement) {
         }
         const divElementID = currDivElement.id;
         const gridObject = grids[divElementID];
-        if (gridObject.DOMElement === currDivElement && gridObject.player) {
+        if (gridObject.DOMElement === currDivElement && gridObject.getPlayer()) {
             return;
         }
 
@@ -57,18 +63,22 @@ function updateInfo() {
 function updateWhosturn(documentElement=whosturnInfo) {
     documentElement.textContent = whosturnMessage();
 }
-function updateHint(hintMessage) {
+function updateHint(hintMessage, gameEnd=false) {
     if (!hintMessage) {
         gamehint.textContent = START_MSG;
     }
-    // check for win and tie
+
+    // if game ends and no winner, it's a tie.
+    // if game ends and winner, there's a winner
+    // otherwise continue
+
 }
 
 function setGridPlayer(gridObj, strawberry = isPlayerStrawberrysTurn) {
-    if (gridObj.player) {
+    if (gridObj.getPlayer()) {
         throw new Error('This grid is occupied.');
     }
-    gridObj.player = strawberry ? STRAWBERRY_PLAYER_NAME : BLUEBERRY_PLAYER_NAME;
+    gridObj.setPlayer(strawberry ? STRAWBERRY_PLAYER_NAME : BLUEBERRY_PLAYER_NAME);
 }
 
 function swapTurn(forceTurn = undefined) {
@@ -79,15 +89,35 @@ function swapTurn(forceTurn = undefined) {
     isPlayerStrawberrysTurn = !isPlayerStrawberrysTurn;
 }
 
-function reset() {
-    // isPlayerStrawberrysTurn = true;
-    swapTurn(true); // set to strawberry
-
+function initGameboard() {
     for (let i = 0; i < 9; i++) {
         const grid = makeGrid(i);
         grids.push(grid);
         addClickCallback(grid.DOMElement);
     }
+}
+function resetGameboard() {
+    grids.forEach(g => {
+    // remove player from grid object
+        g.setPlayer(null);
+    // remove image from div.grid-content DOM object
+        g.DOMElement.querySelector('div.grid-content').innerHTML = "";
+    });
+}
+
+function initGame() {
+    swapTurn(true); // set to strawberry
+
+    initGameboard();
+
+    updateInfoControlArea();
+}
+
+function reset() {
+    // isPlayerStrawberrysTurn = true;
+    swapTurn(true); // set to strawberry
+
+    resetGameboard();
 
     updateInfoControlArea();
 }
@@ -109,8 +139,19 @@ function setGridIcon(gridElement, strawberry=isPlayerStrawberrysTurn) {
     gridElement.querySelector('div.grid-content').appendChild(gridIcon);
 }
 
+function addResetButtonCallback(button=restartButton) {
+    button.addEventListener('click', e => {
+        const reply = prompt(RESTART_PROMPT_MSG).toLowerCase();
+        if (ACCEPTABLE_RESTART_MESSAGES.includes(reply)) {
+            reset();
+        }
+    });
+}
+
 function init() {
-    reset();
+    addResetButtonCallback();
+    // reset();
+    initGame();
 }
 
 init();
