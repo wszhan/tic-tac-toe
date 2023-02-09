@@ -1,4 +1,4 @@
-let isPlayerStrawberrysTurn = undefined;
+let isPlayerStrawberrysTurn = true;
 let winner = undefined;
 
 const STRAWBERRY_ICON_PATH = './assets/icons/icons8-strawberry-color-96.png';
@@ -7,9 +7,10 @@ const STRAWBERRY_PLAYER_NAME = 'strawberry';
 const BLUEBERRY_PLAYER_NAME = 'blueberry';
 const START_MSG = 'Click any grid to start the game';
 const WIN_MSG = `Player {$winner} wins!`;
-const HINT = `Player ${isPlayerStrawberrysTurn ? 'Strawberry' : 'Blueberry'}'s turn`;
 
 const gameboard = document.querySelector('div.gameboard');
+const whosturnInfo = document.querySelector('div.player-turn');
+const gamehint = document.querySelector('div.game-state');
 const grids = [];
 
 function makeGrid(index) {
@@ -37,9 +38,30 @@ function addClickCallback(gridElement) {
         // all following is only valid in an empty/unoccupied grid
         setGridIcon(currDivElement);
         setGridPlayer(grids[divElementID]);
-
         swapTurn();
+        updateInfoControlArea();
     });
+}
+
+function updateInfoControlArea() {
+    updateHint();
+    // updateInfo();
+    updateWhosturn();
+}
+
+function whosturnMessage(strawberry=isPlayerStrawberrysTurn) {
+    return `Player ${strawberry ? 'Strawberry' : 'Blueberry'}'s turn`;
+}
+function updateInfo() {
+}
+function updateWhosturn(documentElement=whosturnInfo) {
+    documentElement.textContent = whosturnMessage();
+}
+function updateHint(hintMessage) {
+    if (!hintMessage) {
+        gamehint.textContent = START_MSG;
+    }
+    // check for win and tie
 }
 
 function setGridPlayer(gridObj, strawberry = isPlayerStrawberrysTurn) {
@@ -58,13 +80,16 @@ function swapTurn(forceTurn = undefined) {
 }
 
 function reset() {
-    isPlayerStrawberrysTurn = true;
+    // isPlayerStrawberrysTurn = true;
+    swapTurn(true); // set to strawberry
 
     for (let i = 0; i < 9; i++) {
         const grid = makeGrid(i);
         grids.push(grid);
         addClickCallback(grid.DOMElement);
     }
+
+    updateInfoControlArea();
 }
 
 function createGridInDom(index) {
