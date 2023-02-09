@@ -8,7 +8,7 @@ const STRAWBERRY_PLAYER_NAME = 'strawberry';
 const BLUEBERRY_PLAYER_NAME = 'blueberry';
 const START_MSG = 'Click any grid to start the game';
 const WIN_MSG = `Player {$winner} wins!`;
-const RESTART_PROMPT_MSG = 'Do you want to restart the game? If yes, input \'y\'.';
+const RESTART_PROMPT_MSG = 'Do you want to restart the game? If yes, just input anything.';
 const ACCEPTABLE_RESTART_MESSAGES = ['y', 'yes', 'yeah', 'ya', 'yup'];
 
 const restartButton = document.querySelector('button#restart-button');
@@ -88,14 +88,14 @@ function addClickCallback(gridElement) {
         setGridIcon(currDivElement);
         setGridPlayer(grids[divElementID]);
         swapTurn();
-        updateInfoControlArea();
         moves++;
 
         winner = checkWinner();
 
-        if (moves === 9 || winner) {
-            updateInfoControlArea();
-        }
+        updateInfoControlArea();
+        // if (moves === 9 || winner) {
+        //     updateInfoControlArea();
+        // }
     });
 }
 
@@ -203,10 +203,12 @@ function setGridIcon(gridElement, strawberry=isPlayerStrawberrysTurn) {
 
 function addResetButtonCallback(button=restartButton) {
     button.addEventListener('click', e => {
-        const reply = prompt(RESTART_PROMPT_MSG).toLowerCase();
-        if (ACCEPTABLE_RESTART_MESSAGES.includes(reply)) {
-            reset();
-        }
+        const reply = prompt(RESTART_PROMPT_MSG);
+        if (reply.length) reset(); 
+        // const reply = prompt(RESTART_PROMPT_MSG).toLowerCase();
+        // if (ACCEPTABLE_RESTART_MESSAGES.includes(reply)) {
+        //     reset();
+        // }
     });
 }
 
