@@ -1,5 +1,6 @@
 let isPlayerStrawberrysTurn = true;
 let winner = undefined;
+let moves = 0;
 
 const STRAWBERRY_ICON_PATH = './assets/icons/icons8-strawberry-color-96.png';
 const BLUEBERRY_ICON_PATH = './assets/icons/icons8-blueberry-color-96.png';
@@ -27,8 +28,50 @@ function makeGrid(index) {
     };
 }
 
+function checkThreeGrids(first, second, third) {
+    if (first && second && first.getPlayer() === second.getPlayer() &&
+        third && second.getPlayer() === third.getPlayer()) {
+            return first.getPlayer();
+    }
+
+    return undefined;
+}
+
+function checkWinner(gamegrids=grids) {
+    let result = undefined;
+    const offset = 3;
+
+    // check rows
+    for (let row = 0; row < 3; row++) {
+        const startIndex = row * 3;
+        const first = gamegrids[startIndex], second = gamegrids[startIndex+1], third = gamegrids[startIndex+2];
+        result = checkThreeGrids(first, second, third);
+        if (result) return result; 
+    }
+
+    // check cols 
+    for (let col = 0; col < 3; col++) {
+        const first = gamegrids[col], second = gamegrids[col+offset], third = gamegrids[col+offset*2];
+        result = checkThreeGrids(first, second, third);
+        if (result) return result; 
+    }
+    // check diagonals
+    result = checkThreeGrids(
+        gamegrids[0], gamegrids[4], gamegrids[8]
+    );
+    if (result) return result;
+    result = checkThreeGrids(
+        gamegrids[2], gamegrids[4], gamegrids[6]
+    );
+    if (result) return result;
+
+    return undefined;
+}
+
 function addClickCallback(gridElement) {
     gridElement.addEventListener('click', e => {
+        if (moves === 9 || winner) return;
+
         const currDivElement = e.target; // this might not be the div we want, e.g. it can be an image
         // 1. is this a div.grid-element?
         // 2. ts this grid occupied?
@@ -46,6 +89,13 @@ function addClickCallback(gridElement) {
         setGridPlayer(grids[divElementID]);
         swapTurn();
         updateInfoControlArea();
+        moves++;
+
+        winner = checkWinner();
+
+        if (moves === 9 || winner) {
+            updateInfoControlArea();
+        }
     });
 }
 
@@ -106,17 +156,21 @@ function resetGameboard() {
 }
 
 function initGame() {
-    swapTurn(true); // set to strawberry
+    resetGameState();
 
     initGameboard();
 
     updateInfoControlArea();
 }
 
-function reset() {
-    // isPlayerStrawberrysTurn = true;
+function resetGameState() {
+    moves = 0;
+    winner = undefined;
     swapTurn(true); // set to strawberry
+}
 
+function reset() {
+    resetGameState();
     resetGameboard();
 
     updateInfoControlArea();
