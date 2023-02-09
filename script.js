@@ -106,22 +106,30 @@ function updateInfoControlArea() {
 }
 
 function whosturnMessage(strawberry=isPlayerStrawberrysTurn) {
+    if (winner || moves === 9) return 'No more moves.';
     return `Player ${strawberry ? 'Strawberry' : 'Blueberry'}'s turn`;
 }
-function updateInfo() {
-}
+// function updateInfo() {
+// }
 function updateWhosturn(documentElement=whosturnInfo) {
     documentElement.textContent = whosturnMessage();
 }
 function updateHint(hintMessage, gameEnd=false) {
-    if (!hintMessage) {
+    if (moves === 0) {
         gamehint.textContent = START_MSG;
+        return;
     }
 
-    // if game ends and no winner, it's a tie.
-    // if game ends and winner, there's a winner
-    // otherwise continue
+    if (winner) {
+        gamehint.textContent = `The winner is ${winner}!`;
+        return;
+    }
+    if (moves === 9) {
+        gamehint.textContent = "This is a tie.";
+        return;
+    }
 
+    gamehint.textContent = 'Keep going.';
 }
 
 function setGridPlayer(gridObj, strawberry = isPlayerStrawberrysTurn) {
